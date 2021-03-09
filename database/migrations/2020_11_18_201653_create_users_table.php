@@ -38,6 +38,9 @@ class CreateUsersTable extends Migration
             $table->integer('access_free')->default(0);
             $table->integer('languages_id')->unsigned()->nullable();
             $table->integer('unsubscribed')->default(0);
+            $table->bigInteger('bots_id')->unsigned();
+            $table->float('satoshi')->default(0);
+            $table->dateTime('getbitcoin')->default('2021-03-09 20:30:46');
 
             $table->index('languages_id');
 

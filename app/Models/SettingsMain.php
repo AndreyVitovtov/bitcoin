@@ -6,6 +6,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static where(string $string, string $prefix)
+ */
 class SettingsMain extends Model
 {
     public $table = 'settings_main';
