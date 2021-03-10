@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\API\FacebookMessenger;
 use App\Models\API\Telegram;
 use App\Models\API\Viber;
+use App\Models\Bot;
 use App\Models\BotUsers;
 use App\Models\buttons\Menu;
 use App\Models\Interaction;
@@ -19,7 +20,6 @@ use Exception;
 /**
  * @method getMessenger()
  * @method methodFromGroupAndChat()
- * @method performAnActionRef(mixed $id)
  * @method start()
  */
 class BaseRequestHandler
@@ -78,6 +78,8 @@ class BaseRequestHandler
             $botUsers->messenger = $this->messenger;
             $botUsers->date = date("Y-m-d");
             $botUsers->time = date("H:i:s");
+            $botUsers->bots_id = BOT['id'];
+            $botUsers->languages_id = BOT['languages_id'];
             $botUsers->save();
             $this->userId = $botUsers->id;
         } else {
@@ -106,7 +108,7 @@ class BaseRequestHandler
     {
         if ($this->messenger == "Viber") {
             $request = json_decode($this->getRequest());
-            return $request->message->type ?? ($request->event == "conversation_started") ? "started" : null;
+            return ($request->message->type) ?? (($request->event == "conversation_started") ? "started" : null);
         } elseif ($this->messenger == "Facebook") {
             $rules = [
                 'postback' => 'postback',
@@ -762,7 +764,7 @@ class BaseRequestHandler
         'input' => 'hidden'
     ], array $n = []): string
     {
-        $message = Text::valueSubstitution($this->getUser(), $message, "page", $n);
+        $message = Text::valueSubstitution($this->getUser(), $message, "pages", $n);
         $buttons = Text::valueSubstitutionArray($this->getUser(), $buttons, $n);
         if ($inline) {
             $params['inlineButtons'] = $buttons;

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Answers;
 use App\Http\Controllers\Admin\Bots;
+use App\Http\Controllers\Admin\Channels;
 use App\Http\Controllers\Admin\Contacts;
 use App\Http\Controllers\Admin\Languages;
 use App\Http\Controllers\Admin\Mailing;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\Moderators;
 use App\Http\Controllers\Admin\Settings;
 use App\Http\Controllers\Admin\Statistics;
 use App\Http\Controllers\Admin\Users;
+use App\Http\Controllers\Admin\Withdrawals;
 use App\Http\Controllers\Bot\RequestHandler;
 use App\Http\Controllers\Developer\Lang;
 use App\Http\Controllers\Developer\Menu;
@@ -171,6 +173,18 @@ Route::group(['middleware' => 'auth', 'prefix'=>'admin'], function() {
         Route::get('/list', [Bots::class, 'list'])->name('list-bots');
         Route::get('/add', [Bots::class, 'add'])->name('add-bot');
         Route::post('/add/save', [Bots::class, 'addSave'])->name('add-bot-save');
+        Route::post('/delete', [Bots::class, 'delete'])->name('bot-delete');
+    });
+
+    Route::group(['prefix' => 'withdrawal', 'middleware' => 'access:withdrawal'], function() {
+        Route::get('/', [Withdrawals::class, 'index'])->name('withdrawal');
+        Route::post('/paid', [Withdrawals::class, 'paid'])->name('withdrawal-paid');
+        Route::post('/cancel', [Withdrawals::class, 'cancel'])->name('withdrawal-cancel');
+    });
+
+    Route::group(['prefix' => 'channels', 'middleware' => 'access:channels'], function() {
+        Route::get('/', [Channels::class, 'index'])->name('channels');
+        Route::post('/save', [Channels::class, 'save'])->name('channels-save');
     });
 });
 

@@ -18,6 +18,7 @@ class CreateBotsTable extends Migration
             $table->string('token');
             $table->string('name')->nullable();
             $table->integer('languages_id')->unsigned();
+            $table->string('messenger');
 
             $table->index('languages_id');
 

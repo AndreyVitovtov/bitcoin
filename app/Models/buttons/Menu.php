@@ -8,6 +8,8 @@ use App\Models\Answer;
  * @method static main($params = [])
  * @method static start()
  * @method static back()
+ * @method static myWallet()
+ * @method static subscribed(string $string)
  */
 class Menu {
     public static function __callStatic($name, $arguments): array
@@ -15,7 +17,8 @@ class Menu {
         $className = 'App\Models\buttons\Buttons' . (defined('MESSENGER') ? MESSENGER : $arguments[0]['messenger']);
         if (method_exists($className, $name)) {
             $buttons = new $className;
-            return $buttons->$name($arguments);
+
+            return $buttons->$name($arguments[0] ?? '');
         } else {
             $menu = [];
             if (file_exists($path = public_path('json/menu/' . $name . '.json'))) {

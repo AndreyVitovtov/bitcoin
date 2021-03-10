@@ -39,6 +39,7 @@ class Bots extends Controller
             $bot->languages_id = $request['language'];
             $bot->token = $request['token'];
             $bot->name = $request['name'];
+            $bot->messenger = $request['messenger'];
             $bot->save();
             $url = url('bot/index/' . $bot->id);
             if ($request['messenger'] == 'telegram') {
@@ -47,9 +48,24 @@ class Bots extends Controller
                 $messenger = new Viber($bot->token);
             }
             $messenger->setWebhook($url);
+            DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
         }
+        return redirect()->to(route('list-bots'));
+    }
+
+    public function delete(Request $request)
+    {
+        $request = $request->post();
+        $bot = Bot::find($request['id']);
+        if($bot->messenger == 'telegram') {
+            $messenger = new Telegram($bot->token);
+        } else {
+            $messenger = new Viber($bot->telegram);
+        }
+        $messenger->deleteWebhook();
+        Bot::where('id', $request['id'])->delete();
         return redirect()->to(route('list-bots'));
     }
 }

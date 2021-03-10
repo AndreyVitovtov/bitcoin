@@ -5,6 +5,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -21,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed id
  * @property mixed languages_id
  * @property mixed language
+ * @property bool|mixed bots_id
+ * @property mixed count_ref
+ * @property mixed satoshi
  */
 class BotUsers extends Model
 {
@@ -41,11 +45,29 @@ class BotUsers extends Model
         'start',
         'count_ref',
         'access_free',
-        'language'
+        'languages_id',
+        'bots_id',
+        'satoshi',
+        'getbitcoin'
     ];
 
-    public function chats(): HasMany
+    public function bot(): BelongsTo
     {
-        return $this->hasMany(Chat::class, 'users_id');
+        return $this->belongsTo(Bot::class, 'bots_id');
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class, 'languages_id');
+    }
+
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'users_id');
+    }
+
+    public function actions(): HasMany
+    {
+        return $this->hasMany(Action::class, 'users_id');
     }
 }

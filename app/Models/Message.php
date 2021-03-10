@@ -31,17 +31,22 @@ class Message {
 
     public function send($messenger, $chat, $message, $n = []): ?string
     {
-        $texts = new Text();
-        $user = (new BotUsers)->where('chat', $chat)->get();
-        $message = $texts->valueSubstitution($user, $message, 'pages', $n);
+        $user = (new BotUsers)->where('chat', $chat)->first();
+        $message = Text::valueSubstitution($user, $message, 'pages', $n);
         if($messenger == "Telegram") {
-            $mainMenu = $texts->valueSubstitutionArray($user, Menu::main(['messenger' => 'Telegram']));
+            if(!$this->tgm) {
+                $this->tgm = new Telegram($user->bot->token);
+            }
+            $mainMenu = Text::valueSubstitutionArray($user, Menu::main(['messenger' => 'Telegram']));
             return $this->tgm->sendMessage($chat, $message, [
                 'buttons' => $mainMenu
             ]);
         }
         elseif($messenger == "Viber") {
-            $mainMenu = $texts->valueSubstitutionArray($user, Menu::main(array('messenger' => 'Viber')));
+            if(!$this->viber) {
+                $this->viber = new Viber($user->bot->token);
+            }
+            $mainMenu = Text::valueSubstitutionArray($user, Menu::main(array('messenger' => 'Viber')));
             return $this->viber->sendMessage($chat, $message, [
                 'buttons' => $mainMenu
             ]);

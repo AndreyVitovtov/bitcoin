@@ -41,4 +41,19 @@ class InlineButtons {
         }
         return $buttonsLanguages;
     }
+
+    public static function checkSubscription($link): array
+    {
+        return [
+            [[
+                "text" => "Channel",
+                "url" => $link
+
+            ]],
+            [[
+                "text" => '{subscribed}',
+                "callback_data" => "checkSubscription"
+            ]]
+        ];
+    }
 }

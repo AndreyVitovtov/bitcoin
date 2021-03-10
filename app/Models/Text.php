@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Text extends Model {
     public static function valueSubstitution($user, $str, $type, $n = []) {
         $language = Language::find($user->languages_id ?? 1);
-        if(file_exists(public_path()."/json/".$type."_".($language->code ?? 'ru').".json")) {
-            $type = $type."_".($language->code ?? 'ru');
+        if(file_exists(public_path()."/json/".$type."_".($language->code ?? 'RU').".json")) {
+            $type = $type."_".($language->code ?? 'RU');
         }
         if(preg_match_all('/{([^}]*)}/', $str, $matches)) {
             $textName = file_get_contents(public_path("json/{$type}.json"));
-            $textName = json_decode($textName, true);
 
+            $textName = json_decode($textName, true);
             foreach($matches[1] as $word) {
                 if(!empty($textName[$word])) {
                     $text = $textName[$word];

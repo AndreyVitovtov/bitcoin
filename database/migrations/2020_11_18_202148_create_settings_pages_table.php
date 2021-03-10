@@ -10,11 +10,11 @@ class CreateSettingsPagesTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $tableName = 'settings_pages_ru';
+    public $tableName = 'settings_pages_RU';
 
     /**
      * Run the migrations.
-     * @table settings_pages_ru
+     * @table settings_pages_RU
      *
      * @return void
      */

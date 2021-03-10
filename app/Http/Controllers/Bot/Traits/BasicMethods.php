@@ -16,7 +16,6 @@ use App\Models\ContactsType;
 use App\Models\Language;
 use App\Models\RefSystem;
 use App\Services\Contracts\BotService;
-use http\Client\Request;
 
 trait BasicMethods
 {
@@ -66,14 +65,15 @@ trait BasicMethods
     {
         $bot = Bot::find($id);
         define((MESSENGER == 'Telegram' ? 'TELEGRAM_TOKEN' : 'VIBER_TOKEN'), $bot->token ?? '0');
+        define('BOT', $bot->toArray());
         parent::__construct();
 
         file_put_contents(public_path("json/request.json"), $this->getRequest());
 
         if ($this->getType() == "started") {
             $this->setUserId();
-
             $context = $this->getBot()->getContext();
+
             if ($context) {
                 $context = str_replace(" ", "+", $context);
                 if ($this->messenger == "Viber" && substr($context, -2) != "==") {
@@ -82,7 +82,6 @@ trait BasicMethods
 
                 $this->startRef($context);
             }
-
             $this->send("{greeting}", Menu::start());
         } else {
             $this->callMethodIfExists();
@@ -110,9 +109,9 @@ trait BasicMethods
                 $this->startRef($chat);
             }
         }
-
         //TODO: execute start method
 
+        $this->checkSubscription(true);
         $this->send("{welcome}", Menu::main());
     }
 
@@ -203,11 +202,10 @@ trait BasicMethods
         exit;
     }
 
-    public function performAnActionRef($referrerId)
-    {
-        $this->userAccess($referrerId);
-        $this->send("REF SYSTEM");
-    }
+//    public function performAnActionRef($referrerId)
+//    {
+//        $this->send("REF SYSTEM");
+//    }
 
     public function userAccess($id)
     {
