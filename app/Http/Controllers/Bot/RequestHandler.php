@@ -38,7 +38,6 @@ class RequestHandler extends BaseRequestHandler
             }
             $this->send($message, Menu::main(), false, [], $time);
         }
-        $this->send("знак" . $this->timeToHours()[0]);
     }
 
     public function myWallet()

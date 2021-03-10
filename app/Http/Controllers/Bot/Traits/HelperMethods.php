@@ -24,8 +24,6 @@ trait HelperMethods
                     ]
                 );
                 die;
-            } else {
-                $this->main();
             }
         } elseif($viber) {
             if($channel && $channel->channels_name) {

@@ -30,7 +30,7 @@ class Action extends Model
         return $this->belongsTo(BotUsers::class, 'users_id');
     }
 
-    private function accruals($userId, $amount): bool
+    private function accruals($userId, $amount, $get = false): bool
     {
         try {
             DB::beginTransaction();
@@ -45,6 +45,9 @@ class Action extends Model
             $user = BotUsers::find($userId);
             $user->satoshi += $amount;
             $user->total += $amount;
+            if($get) {
+                $user->getbitcoin = date('Y-m-d H:i:s');
+            }
             $user->save();
 
             DB::commit();
@@ -57,7 +60,7 @@ class Action extends Model
 
     public function getBitcoin($userId, $amount): bool
     {
-        return $this->accruals($userId, $amount);
+        return $this->accruals($userId, $amount, true);
     }
 
     public function accrualsForReferrers($referrer): ?array

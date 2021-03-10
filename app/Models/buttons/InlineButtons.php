@@ -52,7 +52,7 @@ class InlineButtons {
             ]],
             [[
                 "text" => '{subscribed}',
-                "callback_data" => "checkSubscription"
+                "callback_data" => "subscribed__2"
             ]]
         ];
     }
