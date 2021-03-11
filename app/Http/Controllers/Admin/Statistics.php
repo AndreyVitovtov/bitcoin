@@ -81,21 +81,26 @@ class Statistics extends Controller {
             }
         }
 
-        //Статистика по доступу
-        $accessNo = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '0'");
-        $accessPaid = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '1' AND access_free = '0'");
-        $accessFree = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '1' AND access_free = '1'");
-        $access = [
-            'no' => $accessNo[0]->count,
-            'paid' => $accessPaid[0]->count,
-            'free' => $accessFree[0]->count
-        ];
+        //Статистика Bitcoin
+        $bitcoin['total'] = DB::select("SELECT SUM(`total`) AS `sum` FROM `users`");
+        $bitcoin['paid'] = DB::select("SELECT SUM(`satoshi`) AS `sum` FROM `withdrawals` WHERE `status` = 1");
+        $bitcoin['waiting'] = DB::select("SELECT SUM(`satoshi`) AS `sum` FROM `withdrawals` WHERE `status` = 1");
 
+//        //Статистика по доступу
+//        $accessNo = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '0'");
+//        $accessPaid = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '1' AND access_free = '0'");
+//        $accessFree = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '1' AND access_free = '1'");
+//        $access = [
+//            'no' => $accessNo[0]->count,
+//            'paid' => $accessPaid[0]->count,
+//            'free' => $accessFree[0]->count
+//        ];
 
         $statistics->countries = $countries;
         $statistics->messengers = $messengers;
         $statistics->visits = $visits;
-        $statistics->access = $access;
+//        $statistics->access = $access;
+        $statistics->bitcoin = $bitcoin;
 
         $view->statistics = $statistics;
 

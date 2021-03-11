@@ -42,6 +42,14 @@
         chart.options.title = "@lang('pages.statistics_count_users_visits')";
         chart.data = statistics.visits;
         chart.drawColumn('chart_visits');
-    </script>
 
+    //Bitcoin
+        chart.options.title = "@lang('pages.statistics_bitcoin')";
+        chart.options.colors = ['#0088cc', '#0abd20', '#ffee13'];
+        chart.data = [
+            ['', '@lang('pages.bitcoin_total')', '@lang('pages.bitcoin_paid')', '@lang('pages.bitcoin_waiting')'],
+            ["@lang('pages.satoshi')", statistics.bitcoin.total, statistics.bitcoin.paid, statistics.bitcoin.waiting]
+        ];
+        chart.drawBar('chart_bitcoin');
+    </script>
 @endsection
