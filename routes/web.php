@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth', 'prefix'=>'admin'], function() {
         Route::post('/count/chat', [Users::class, 'countChat'])->name('user-count-chat');
         Route::post('/count/mailing', [Users::class, 'countMailing'])->name('user-count-mailing');
         Route::post('/send/message', [Users::class, 'sendMessage'])->name('user-send-message');
+        Route::post('/charge/satoshi', [Users::class, 'chargeSatoshi'])->name('charge-satoshi');
     });
 
     Route::group(['prefix' => 'languages', 'middleware' => 'access:languages'], function () {

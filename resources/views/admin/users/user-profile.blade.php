@@ -103,6 +103,21 @@
                 </div>
             </form>
         </div>
+        <br>
+        <div>
+            <form action="{{ route('charge-satoshi') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $profile->id }}">
+                <div>
+                    <label for="">@lang('pages.satoshi')</label>
+                </div>
+                <div>
+                    <input type="number" name="satoshi" id="satoshi">
+                </div>
+                <br>
+                <input type="submit" value="@lang('pages.charge')" class="button">
+            </form>
+        </div>
     </div>
 
     <script>

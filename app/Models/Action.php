@@ -30,7 +30,7 @@ class Action extends Model
         return $this->belongsTo(BotUsers::class, 'users_id');
     }
 
-    private function accruals($userId, $amount, $get = false): bool
+    public function accruals($userId, $amount, $get = false): bool
     {
         try {
             DB::beginTransaction();

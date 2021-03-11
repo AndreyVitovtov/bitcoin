@@ -6,11 +6,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserDepositRequest;
+use App\Models\Action;
 use App\Models\Bonus;
 use App\Models\BotUsers;
 use App\Models\Message;
 use App\Models\PaymentCreateChat;
 use App\Models\PaymentMailingChat;
+use App\Models\Text;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -120,6 +122,21 @@ class Users extends Controller {
         $message->send($user->messenger, $user->chat, $request->post('message'));
 
         return redirect()->to(url('admin/users/profile/'.$request->post('id')));
+    }
+
+    public function chargeSatoshi(Request $request)
+    {
+        $request = $request->post();
+        $action = new Action();
+        if($action->accruals($request['id'], $request['satoshi'])) {
+            $user = BotUsers::find($request['id']);
+            (new Message)->send($user->messenger, $user->chat,
+                Text::valueSubstitution($user, '{charge_satoshi}', 'pages', [
+                    'satoshi' => $request['satoshi']
+                ]));
+        }
+
+        return redirect()->to(route('user-profile', $request['id']));
     }
 
 }
