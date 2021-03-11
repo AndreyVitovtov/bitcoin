@@ -82,9 +82,12 @@ class Statistics extends Controller {
         }
 
         //Статистика Bitcoin
-        $bitcoin['total'] = DB::select("SELECT SUM(`total`) AS `sum` FROM `users`");
-        $bitcoin['paid'] = DB::select("SELECT SUM(`satoshi`) AS `sum` FROM `withdrawals` WHERE `status` = 1");
-        $bitcoin['waiting'] = DB::select("SELECT SUM(`satoshi`) AS `sum` FROM `withdrawals` WHERE `status` = 1");
+        $bitcoin['total'] = DB::select("SELECT SUM(total) AS `sum` FROM `users`")[0]
+            ->sum ?? 0;
+        $bitcoin['paid'] = DB::select("SELECT SUM(satoshi) AS `sum` FROM `withdrawals` WHERE `status` = 1")[0]
+            ->sum ?? 0;
+        $bitcoin['waiting'] = DB::select("SELECT SUM(satoshi) AS `sum` FROM `withdrawals` WHERE `status` = 1")[0]
+            ->sum ?? 0;
 
 //        //Статистика по доступу
 //        $accessNo = DB::select("SELECT COUNT(*) AS count FROM users WHERE access = '0'");
