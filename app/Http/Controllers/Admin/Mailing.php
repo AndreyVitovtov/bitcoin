@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Bot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,7 @@ class Mailing extends Controller{
         }
 
         $view->countries = $countries;
+        $view->bots = Bot::all();
         return $view;
     }
 
@@ -68,8 +70,11 @@ class Mailing extends Controller{
             }
         }
 
+//        $db = DB::table('users')
+//            ->where('messenger', 'LIKE', $params['messenger']);
+
         $db = DB::table('users')
-            ->where('messenger', 'LIKE', $params['messenger']);
+            ->where('bots_id', $params['bot']);
 
         if($params['country'] !== 'all') {
             $db = $db->where('country', $params['country']);
@@ -86,8 +91,8 @@ class Mailing extends Controller{
         $task['create'] = date("Y-m-d H:i:s");
         $task['performed'] = "false";
         $task['country'] = $params['country'];
-        $task['messenger'] = $params['messenger'];
-
+//        $task['messenger'] = $params['messenger'];
+        $task['bot'] = $params['bot'];
         file_put_contents(public_path('/json/mailing_task.json'), json_encode($task));
         file_put_contents(public_path('/txt/log.txt'), "");
 

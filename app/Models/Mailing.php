@@ -12,6 +12,7 @@ class Mailing
     public $pathTask;
     public $countUsers;
     public $chatPathTask;
+    private $token;
 
     public function __construct()
     {
@@ -35,8 +36,12 @@ class Mailing
             'message' => 'Mailing performed'
         ]);
 
+        $this->token = Bot::find($task->bot)->token;
+
+//        $db = DB::table('users')
+//            ->where('messenger', 'LIKE', $task->messenger);
         $db = DB::table('users')
-            ->where('messenger', 'LIKE', $task->messenger);
+            ->where('bots_id', $task->bot);
 
         if ($task->country !== 'all') {
             $db = $db->where('country', $task->country);
@@ -62,7 +67,9 @@ class Mailing
             if (isset($task->img)) {
                 $imgArr = explode("/", $task->img);
                 $imgName = end($imgArr);
-                unlink(public_path('/img/mailing/' . $imgName));
+                if(file_exists(public_path('/img/mailing/' . $imgName))) {
+                    unlink(public_path('/img/mailing/' . $imgName));
+                }
             }
             return json_encode([
                 'status' => 'fail',
@@ -82,15 +89,16 @@ class Mailing
                         $data[] = [
                             'key' => $user->chat,
                             'messenger' => $user->messenger,
-                            'url' => "https://api.telegram.org/bot" .
-                                (defined('TELEGRAM_TOKEN') ? TELEGRAM_TOKEN : null) . "/sendMessage",
+                            'url' => "https://api.telegram.org/bot" . $this->token . "/sendMessage",
                             'params' => [
                                 'text' => $task->text,
                                 'chat_id' => $user->chat,
                                 'parse_mode' => 'HTML',
                                 'disable_web_page_preview' => true,
                                 'reply_markup' => [
-                                    'keyboard' => Text::valueSubstitutionArray($user, Menu::main('Telegram')),
+                                    'keyboard' => Text::valueSubstitutionArray($user, Menu::main(
+                                        ['messenger' => 'Telegram']
+                                    )),
                                     'resize_keyboard' => true,
                                     'one_time_keyboard' => false,
                                     'parse_mode' => 'HTML',
@@ -112,7 +120,9 @@ class Mailing
                                     'Type' => 'keyboard',
                                     'InputFieldState' => 'hidden',
                                     'DefaultHeight' => 'false',
-                                    'Buttons' => Text::valueSubstitutionArray($user, Menu::main('Viber'))
+                                    'Buttons' => Text::valueSubstitutionArray($user, Menu::main(
+                                        ['messenger' => 'Viber']
+                                    ))
                                 ]
                             ]
                         ];
@@ -137,15 +147,16 @@ class Mailing
                         $data[] = [
                             'key' => $user->chat,
                             'messenger' => $user->messenger,
-                            'url' => 'https://api.telegram.org/bot' .
-                                (defined('TELEGRAM_TOKEN') ? TELEGRAM_TOKEN : null) . '/sendPhoto',
+                            'url' => 'https://api.telegram.org/bot' . $this->token . '/sendPhoto',
                             'params' => [
                                 'chat_id' => $user->chat,
                                 'photo' => $task->img,
                                 'caption' => $task->text,
                                 'parse_mode' => 'Markdown',
                                 'reply_markup' => [
-                                    'keyboard' => Text::valueSubstitutionArray($user, Menu::main('Telegram')),
+                                    'keyboard' => Text::valueSubstitutionArray($user, Menu::main(
+                                        ['messenger' => 'Telegram']
+                                    )),
                                     'resize_keyboard' => true,
                                     'one_time_keyboard' => false,
                                     'parse_mode' => 'HTML',
@@ -168,7 +179,9 @@ class Mailing
                                     'Type' => 'keyboard',
                                     'InputFieldState' => 'hidden',
                                     'DefaultHeight' => 'false',
-                                    'Buttons' => Text::valueSubstitutionArray($user, Menu::main('Viber'))
+                                    'Buttons' => Text::valueSubstitutionArray($user, Menu::main(
+                                        ['messenger' => 'Viber']
+                                    ))
                                 ]
                             ]
                         ];
@@ -226,7 +239,7 @@ class Mailing
             ];
 
             if ($item['messenger'] == "Viber") {
-                $headers[] = 'X-Viber-Auth-Token: ' . (defined('VIBER_TOKEN') ? VIBER_TOKEN : null);
+                $headers[] = 'X-Viber-Auth-Token: ' . $this->token;
             }
 
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
