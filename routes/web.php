@@ -67,6 +67,7 @@ Route::match(['post'], 'payment/invoice', [Pay::class, 'invoice'])->name('paymen
 
 Route::match(['get', 'post'], 'bot/index/{id?}', [RequestHandler::class, 'index'])->name('bot-request-handler');
 Route::get('bot/send/mailing', [Send::class, 'mailing']); // Рассылка (Каждые 2 минуты)
+Route::get('bot/send/reminder', [Send::class, 'reminder']); // Рассылка напоминания (1 раз в сутки)
 
 Route::match(['get', 'post'], 'pay/handler', [Payment::class, 'handler']);
 

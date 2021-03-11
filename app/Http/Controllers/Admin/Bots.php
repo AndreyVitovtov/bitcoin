@@ -11,6 +11,10 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
+/**
+ * @method static all(string $string, string $string1, string $string2)
+ */
 class Bots extends Controller
 {
     public function list()
