@@ -1,6 +1,8 @@
 Installation
 <br>
+<br>
 Required php modules: `bcmath.so`, `gmp.so`
+<br>
 <br>
 1). In the terminal, execute the commands:
 <br>
