@@ -32,6 +32,6 @@ class CreateTrigger extends Migration
      */
     public function down()
     {
-        DB::unprepared('DROP TRIGGER `referral_system_AFTER_INSERT`');
+        DB::unprepared("DROP TRIGGER `referral_system_AFTER_INSERT`");
     }
 }
