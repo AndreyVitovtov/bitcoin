@@ -28,7 +28,9 @@ class RequestHandler extends BaseRequestHandler
                     'satoshi' => $amount
                 ]);
             } else {
-                $this->send('{error}', Menu::main());
+                $this->send('{error}', Menu::main(), false, [], [
+                    'error' => ''
+                ]);
             }
         } else {
             if ($time['h'] == '0') {
@@ -96,7 +98,9 @@ class RequestHandler extends BaseRequestHandler
             if ($action->withdraw($this->getUserId(), $this->getMessage())) {
                 $this->send('{withdrawal_request_sent}', Menu::main());
             } else {
-                $this->send('{error}', Menu::main());
+                $this->send('{error}', Menu::main(), false, [], [
+                    'error' => ''
+                ]);
             }
             $this->delInteraction();
         } else {

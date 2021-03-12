@@ -436,7 +436,7 @@ class BaseRequestHandler
                         'last_name' => $request->edited_message->chat->last_name ?? null,
                         'username' => $request->edited_message->chat->username ?? null,
                     ],
-                    'text' => $request->edited_message->text
+                    'text' => $request->edited_message->text ?? $request->edited_message->text ?? null
                 ];
             }
             else {
