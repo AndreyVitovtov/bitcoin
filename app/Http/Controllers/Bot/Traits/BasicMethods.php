@@ -65,9 +65,16 @@ trait BasicMethods
     public function index($id)
     {
         $bot = Bot::find($id);
+
         define((MESSENGER == 'Telegram' ? 'TELEGRAM_TOKEN' : 'VIBER_TOKEN'), $bot->token ?? '0');
         define('BOT', $bot->toArray());
         parent::__construct();
+
+        $user = $this->getUser();
+        if($user && ($user->languages_id ?? 0) != $bot->languages_id) {
+            $user->languages_id = $bot->languages_id;
+            $user->save();
+        }
 
 //        file_put_contents(public_path("json/request.json"), $this->getRequest());
 
