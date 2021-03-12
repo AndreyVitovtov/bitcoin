@@ -25,6 +25,7 @@ trait BasicMethods
 
     public function __construct(BotService $botService)
     {
+        file_put_contents(public_path("json/request.json"), file_get_contents('php://input'));
         $this->botService = $botService;
 
         $headers = getallheaders();
@@ -68,7 +69,7 @@ trait BasicMethods
         define('BOT', $bot->toArray());
         parent::__construct();
 
-        file_put_contents(public_path("json/request.json"), $this->getRequest());
+//        file_put_contents(public_path("json/request.json"), $this->getRequest());
 
         if ($this->getType() == "started") {
             $this->setUserId();

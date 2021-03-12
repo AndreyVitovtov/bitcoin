@@ -127,6 +127,7 @@ class BaseRequestHandler
                 'location' => 'location',
                 'contact' => 'contact',
                 'reply_to_message' => 'reply_to_message',
+                'edited_message' => 'edited_message',
                 'text' => 'text',
                 'document' => 'document',
                 'photo' => 'photo',
@@ -239,7 +240,7 @@ class BaseRequestHandler
             if ($this->type == "text") {
                 return [
                     'message_id' => $request->message->message_id,
-                    'text' => $request->message->text
+                    'text' => $request->message->text ?? null
                 ];
             } elseif ($this->type == "document") {
                 $data = [
@@ -420,7 +421,25 @@ class BaseRequestHandler
                     ],
                     'text' => $request->message->text
                 ];
-            } else {
+            } elseif($this->type == 'edited_message') {
+                return [
+                    'message_id' => $request->edited_message->message_id,
+                    'from' => [
+                        'id' => $request->edited_message->from->id,
+                        'first_name' => $request->edited_message->from->first_name ?? null,
+                        'last_name' => $request->edited_message->from->last_name ?? null,
+                        'username' => $request->edited_message->from->username ?? null
+                    ],
+                    'chat' => [
+                        'id' => $request->edited_message->chat->id ?? null,
+                        'first_name' => $request->edited_message->chat->first_name ?? null,
+                        'last_name' => $request->edited_message->chat->last_name ?? null,
+                        'username' => $request->edited_message->chat->username ?? null,
+                    ],
+                    'text' => $request->edited_message->text
+                ];
+            }
+            else {
                 return [
                     'message_id' => $request->message->message_id ?? null,
                     'data' => null
@@ -655,7 +674,7 @@ class BaseRequestHandler
                     );
                 }
             } else {
-                $command = $this->getCommandFromMessage($nameCommand);
+                $command = $this->getCommandFromMessage($nameCommand ?? '');
                 if ($command['command']) {
                     $nameCommand = $command['command'];
                     $params = $command['params'];
@@ -697,7 +716,7 @@ class BaseRequestHandler
                         }
                     } else {
                         //Answers
-                        $answer = Answer::toAnswerIfExistQuestion($nameCommand);
+                        $answer = Answer::toAnswerIfExistQuestion($nameCommand ?? '');
                         if ($answer) {
                             if (method_exists($this, $answer->method)) {
                                 $method = $answer->method;
