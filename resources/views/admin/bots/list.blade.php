@@ -9,7 +9,7 @@
 @endsection
 
 @section("main")
-    <div>
+    <div class="overflow-X-auto">
         <table>
             <tr>
                 <td>№</td>
@@ -22,7 +22,13 @@
             @foreach($bots as $bot)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $bot->name }}</td>
+                    <td>
+                        @if($bot->messenger == "telegram")
+                            <a href="https://t.me/{{ $bot->name }}" class="link" target="_blank">{{ $bot->name }}</a>
+                        @else
+                            <a href="viber://pa?chatURI={{ $bot->name }}" class="link" target="_blank">{{ $bot->name }}</a>
+                        @endif
+                    </td>
                     <td>{{ $bot->messenger }}</td>
                     <td>{{ base64_decode($bot->language->emoji) }} {{ $bot->language->name }}</td>
                     <td>{{ $bot->token }}</td>
