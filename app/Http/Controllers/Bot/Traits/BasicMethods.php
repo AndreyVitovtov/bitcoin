@@ -233,6 +233,7 @@ trait BasicMethods
 
     public function unsubscribed()
     {
+//        (new BotUsers)->where('chat', $this->getChat())->delete();
         dd($this->getChat());
     }
 }
