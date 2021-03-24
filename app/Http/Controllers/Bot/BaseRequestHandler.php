@@ -108,7 +108,8 @@ class BaseRequestHandler
     {
         if ($this->messenger == "Viber") {
             $request = json_decode($this->getRequest());
-            return ($request->message->type) ?? (($request->event == "conversation_started") ? "started" : null);
+            return ($request->message->type) ?? (($request->event == "conversation_started") ? "started" :
+                    (($request->event == "unsubscribed") ? "unsubscribed" : null));
         } elseif ($this->messenger == "Facebook") {
             $rules = [
                 'postback' => 'postback',
@@ -484,8 +485,10 @@ class BaseRequestHandler
                 return "file";
             } elseif ($this->type == "location") {
                 return "location";
-            } elseif ($this->getType() == "contact") {
+            } elseif ($this->type == "contact") {
                 return "contact";
+            } elseif ($this->type == "unsubscribed") {
+                return "unsubscribed";
             } else {
                 return null;
             }

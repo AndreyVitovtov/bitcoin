@@ -230,4 +230,9 @@ trait BasicMethods
             ]);
         }
     }
+
+    public function unsubscribed()
+    {
+        dd($this->getChat());
+    }
 }
