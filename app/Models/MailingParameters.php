@@ -10,6 +10,6 @@ class MailingParameters {
     public static function apply($db, $task) {
         //TODO: Mailing parameters
 
-        return $db;
+        return $db->where('start', 1);
     }
 }
