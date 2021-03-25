@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static insert(array $array)
  * @method static where(string $string, $id)
+ * @method static orderBy(string $string, string $string1)
  */
 class RefSystem extends Model
 {
@@ -15,7 +16,6 @@ class RefSystem extends Model
     public $fillable = [
         'referrer',
         'referral',
-        'date',
-        'time'
+        'datetime'
     ];
 }

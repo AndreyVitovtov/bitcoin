@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Bot;
+use App\Models\BotSettings;
 use App\Models\Language;
 use App\Models\Seeder;
 use App\Models\SettingsButtons;
@@ -244,6 +246,38 @@ class Settings extends Controller {
             $request->post('color_text'),
             (int) $request->post('size_text')
         );
+        return redirect()->back();
+    }
+
+    public function bot(Request $request)
+    {
+        $request->post();
+        if($request['bot']) {
+            $settings = BotSettings::where('bots_id', $request['bot'])->first();
+        }
+        return view('admin.settings.bot', [
+            'bots' => Bot::all(),
+            'menuItem' => 'settingsbot',
+            'settings' => $settings ?? null,
+            'botId' => $request['bot'] ?? 0
+        ]);
+    }
+
+    public function botSave(Request $request)
+    {
+        $request->post();
+        $settings = (BotSettings::where('bots_id', $request['bot_id'])->first() ?? new BotSettings());
+        $settings->bots_id = $request['bot_id'];
+        $settings->satoshi_invite = $request['satoshi_invite'];
+        $settings->satoshi_invite_2 = $request['satoshi_invite_2'];
+        $settings->satoshi_get_bitcoin = $request['satoshi_get_bitcoin'];
+        $settings->number_of_referrals_for_withdrawal = $request['number_of_referrals_for_withdrawal'];
+        $settings->minimum_withdrawal_amount = $request['minimum_withdrawal_amount'];
+        $settings->stock_count_invite = $request['stock_count_invite'];
+        $settings->stock_time = $request['stock_time'];
+        $settings->stock_prize = $request['stock_prize'];
+        $settings->save();
+
         return redirect()->back();
     }
 }

@@ -10,7 +10,6 @@ use App\Models\buttons\InlineButtons;
 use App\Models\buttons\Menu;
 use App\Models\Channel;
 use App\Models\RefSystem;
-use Brick\Math\Internal\Calculator\BcMathCalculator;
 
 trait HelperMethods
 {
@@ -102,6 +101,7 @@ trait HelperMethods
                     'satoshi' => (defined('SATOSHI_INVITE_2') ? SATOSHI_INVITE_2 : 0)
                 ]);
             }
+            $this->stock($referrer);
         } else {
             echo "Error. Referrers are not credited with satoshi";
         }
@@ -112,6 +112,30 @@ trait HelperMethods
             return 'https://telegram.me/'.BOT['name'].'?start='.$this->getChat();
         } else {
             return 'viber://pa?chatURI='.BOT['name'].'&context='.$this->getChat();
+        }
+    }
+
+    private function stock($user) {
+        if($user->count_ref >= STOCK_COUNT_INVITE) {
+            $dateTime = date(
+                'Y-m-d H:i:s',
+                strtotime('-'.STOCK_TIME.' HOURS', strtotime(date('Y-m-d H:i:s')))
+            );
+            $count = RefSystem::where('referrer', $user->id)
+                ->where('datetime', '>=', $dateTime)
+                ->count();
+            if($count == STOCK_COUNT_INVITE) {
+                $action = new Action();
+                if($action->accruals($user->id, STOCK_PRIZE)) {
+                    $this->sendTo($user->chat, '{stock_prize}', Menu::main(), false, [], [
+                        'count_invite' => STOCK_COUNT_INVITE,
+                        'satoshi' => STOCK_PRIZE,
+                        'hours' => STOCK_TIME
+                    ]);
+                } else {
+                    echo "Error. Referrers are not credited with satoshi";
+                }
+            }
         }
     }
 }

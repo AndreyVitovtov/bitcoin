@@ -151,6 +151,8 @@ Route::group(['middleware' => 'auth', 'prefix'=>'admin'], function() {
         Route::get('/pages/go/lang', [Settings::class, 'pagesGoLang'])->name('pages-go-lang');
         Route::get('/pages/{lang}', [Settings::class, 'pages'])->name('settings-pages-lang');
         Route::get('/buttons/{lang}', [Settings::class, 'buttons'])->name('settings-buttons-lang');
+        Route::get('/bot', [Settings::class, 'bot'])->name('settings-bot');
+        Route::post('/bot/save', [Settings::class, 'botSave'])->name('settings-bot-save');
     });
 
     Route::group(['prefix' => 'payment', 'middleware' => 'access:payment'], function () {

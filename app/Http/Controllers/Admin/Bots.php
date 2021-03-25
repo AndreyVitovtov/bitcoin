@@ -51,8 +51,8 @@ class Bots extends Controller
             } else {
                 $messenger = new Viber($bot->token);
             }
-            $messenger->setWebhook($url);
             DB::commit();
+            $messenger->setWebhook($url);
         } catch (Exception $e) {
             DB::rollBack();
         }

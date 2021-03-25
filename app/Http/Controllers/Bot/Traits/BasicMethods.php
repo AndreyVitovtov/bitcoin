@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Bot\Traits;
 
 use App\Models\Bot;
+use App\Models\BotSettings;
 use App\Models\BotUsers;
 use App\Models\buttons\ButtonsFacebook;
 use App\Models\buttons\ButtonsTelegram;
@@ -65,6 +66,16 @@ trait BasicMethods
     public function index($id)
     {
         $bot = Bot::find($id);
+
+        $botSettings = BotSettings::where('bots_id', $bot->id ?? 0)->first();
+        define('SATOSHI_INVITE', $botSettings->satoshi_invite ?? 1);
+        define('SATOSHI_INVITE_2', $botSettings->satoshi_invite_2 ?? 1);
+        define('SATOSHI_GET_BITCOIN', $botSettings->satoshi_get_bitcoin ?? 1);
+        define('NUMBER_OF_REFERRALS_FOR_WITHDRAWAL', $botSettings->number_of_referrals_for_withdrawal ?? 1);
+        define('MINIMUM_WITHDRAWAL_AMOUNT', $botSettings->minimum_withdrawal_amount ?? 1);
+        define('STOCK_COUNT_INVITE', $botSettings->stock_count_invite ?? 1000);
+        define('STOCK_TIME', $botSettings->stock_time ?? 1000);
+        define('STOCK_PRIZE', $botSettings->stock_prize ?? 1000);
 
         define((MESSENGER == 'Telegram' ? 'TELEGRAM_TOKEN' : 'VIBER_TOKEN'), $bot->token ?? '0');
         define('BOT', $bot->toArray());
@@ -209,11 +220,6 @@ trait BasicMethods
         $this->send("{main_menu}", Menu::main());
         exit;
     }
-
-//    public function performAnActionRef($referrerId)
-//    {
-//        $this->send("REF SYSTEM");
-//    }
 
     public function userAccess($id)
     {

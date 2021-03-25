@@ -923,7 +923,11 @@ class BaseRequestHandler
             );
             echo $e->getMessage();
         }
-        $this->performAnActionRef($referrer->id);
+
+        if(method_exists($this, 'performAnActionRef')) {
+            $this->performAnActionRef($referrer);
+        }
+
         if (MESSENGER == "Telegram") {
             $this->start();
         }
