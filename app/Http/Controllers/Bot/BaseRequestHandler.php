@@ -592,6 +592,7 @@ class BaseRequestHandler
         } else {
             $this->send("{unknown_team}", Menu::main());
         }
+        $this->setUserStart();
     }
 
     public function getType(): string

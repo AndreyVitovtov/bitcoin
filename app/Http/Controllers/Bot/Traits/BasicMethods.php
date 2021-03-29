@@ -101,7 +101,7 @@ trait BasicMethods
 
                 $this->startRef($context);
             }
-            $this->send("{greeting}", Menu::start());
+            $this->send("{greeting}", Menu::start(), false, ['input' => 'regular']);
         } else {
             $this->callMethodIfExists();
         }
