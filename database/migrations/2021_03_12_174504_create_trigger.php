@@ -22,7 +22,7 @@ class CreateTrigger extends Migration
                 )
                 WHERE `id` = NEW.referrer
             END
-//        ");
+        ");
     }
 
     /**
