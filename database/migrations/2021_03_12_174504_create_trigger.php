@@ -20,7 +20,7 @@ class CreateTrigger extends Migration
                     FROM `referral_system`
                     WHERE `referrer` = NEW.referrer
                 )
-                WHERE `id` = NEW.referrer
+                WHERE `id` = NEW.referrer;
             END
         ");
     }
