@@ -86,19 +86,16 @@ trait BasicMethods
             $user->languages_id = $bot->languages_id;
             $user->save();
         }
-
 //        file_put_contents(public_path("json/request.json"), $this->getRequest());
 
         if ($this->getType() == "started") {
             $this->setUserId();
             $context = $this->getBot()->getContext();
-
             if ($context) {
                 $context = str_replace(" ", "+", $context);
                 if ($this->messenger == "Viber" && substr($context, -2) != "==") {
                     $context .= "==";
                 }
-
                 $this->startRef($context);
             }
             $this->send("{greeting}", Menu::start(), false, ['input' => 'regular']);

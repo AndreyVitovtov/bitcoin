@@ -91,7 +91,7 @@ trait HelperMethods
     {
         $action = new Action();
         if($referrers = $action->accrualsForReferrers($referrer)) {
-            $referrer = BotUsers::find($referrers[0]);
+            $referrer = BotUsers::find($referrers[0]->id);
             $this->sendTo($referrer->chat, '{satoshi_ref}', Menu::main(), false, [], [
                 'satoshi' => (defined('SATOSHI_INVITE') ? SATOSHI_INVITE : 0)
             ]);

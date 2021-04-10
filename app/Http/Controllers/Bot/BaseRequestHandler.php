@@ -910,8 +910,7 @@ class BaseRequestHandler
                 RefSystem::insert([
                     'referrer' => $referrer->id,
                     'referral' => $referral,
-                    'date' => date("Y-m-d"),
-                    'time' => date("H:i:s")
+                    'datetime' => date("Y-m-d H:i:s")
                 ]);
             }
         } catch (Exception $e) {
