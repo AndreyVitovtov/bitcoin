@@ -98,7 +98,8 @@ trait BasicMethods
                 }
                 $this->startRef($context);
             }
-            $this->send("{greeting}", Menu::start(), false, ['input' => 'regular']);
+            $res = $this->send("{greeting}", Menu::start(), false, ['input' => 'regular']);
+//            dd($res);
         } else {
             $this->callMethodIfExists();
         }

@@ -902,16 +902,22 @@ class BaseRequestHandler
 
     public function startRef($chat)
     {
+        $flag = false;
         try {
             $referral = $this->getUserId();
             $referrer = (new BotUsers)->where('chat', $chat)->first();
 
             if ($referrer->id != $referral) {
-                RefSystem::insert([
-                    'referrer' => $referrer->id,
-                    'referral' => $referral,
-                    'datetime' => date("Y-m-d H:i:s")
-                ]);
+                if(!RefSystem::where('referrer', $referrer->id)
+                    ->where('referral', $referral)
+                    ->exists()) {
+                    $flag = true;
+                    RefSystem::insert([
+                        'referrer' => $referrer->id,
+                        'referral' => $referral,
+                        'datetime' => date("Y-m-d H:i:s")
+                    ]);
+                }
             }
         } catch (Exception $e) {
             /** @var BotUsers $referrer */
@@ -924,8 +930,10 @@ class BaseRequestHandler
             echo $e->getMessage();
         }
 
-        if(method_exists($this, 'performAnActionRef')) {
-            $this->performAnActionRef($referrer);
+        if($flag) {
+            if(method_exists($this, 'performAnActionRef')) {
+                $this->performAnActionRef($referrer);
+            }
         }
 
         if (MESSENGER == "Telegram") {

@@ -65,8 +65,9 @@ class Action extends Model
 
     public function accrualsForReferrers($referrer): ?array
     {
-        if(!$this->accruals($referrer->id, (defined('SATOSHI_INVITE') ? SATOSHI_INVITE : 0)))
+        if(!$this->accruals($referrer->id, (defined('SATOSHI_INVITE') ? SATOSHI_INVITE : 0))) {
             return null;
+        }
         $referrer2 = RefSystem::where('referral', $referrer->id)->first();
         if($referrer2) {
             if(!$this->accruals($referrer2->referrer, (defined('SATOSHI_INVITE_2') ? SATOSHI_INVITE_2 : 0)))
@@ -74,7 +75,7 @@ class Action extends Model
         }
         return [
             $referrer,
-            $referrer2->referrer
+            $referrer2->referrer ?? null
         ];
     }
 

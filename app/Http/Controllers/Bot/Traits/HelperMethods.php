@@ -10,6 +10,7 @@ use App\Models\buttons\InlineButtons;
 use App\Models\buttons\Menu;
 use App\Models\Channel;
 use App\Models\RefSystem;
+use Illuminate\Support\Facades\Log;
 
 trait HelperMethods
 {
@@ -92,9 +93,10 @@ trait HelperMethods
         $action = new Action();
         if($referrers = $action->accrualsForReferrers($referrer)) {
             $referrer = BotUsers::find($referrers[0]->id);
-            $this->sendTo($referrer->chat, '{satoshi_ref}', Menu::main(), false, [], [
+            $res = $this->sendTo($referrer->chat, '{satoshi_ref}', Menu::main(), false, [], [
                 'satoshi' => (defined('SATOSHI_INVITE') ? SATOSHI_INVITE : 0)
             ]);
+
             if($referrers[1]) {
                 $referrer = BotUsers::find($referrers[1]);
                 $this->sendTo($referrer->chat, '{satoshi_ref}', Menu::main(), false, [], [
